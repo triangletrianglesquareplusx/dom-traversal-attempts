@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        
+        
+        //From what I have read it is discouraged to use scripts in the head since it might make load times huge. What was the idea behind putting the script tag in the head? I have never done this before. 
+        document.addEventListener("DOMContentLoaded", function(){
+            console.log(findAllDomChildren('#start-point'));
+            console.log(findAllDomChildrenAlgo('#start-point'));
+            
+            
+        })
+            function findAllDomChildren(identification){
+                //this is my first solution. This came easily and was not very flashy. I know you probably were not looking for this(you would want a dfs/bfs type deal) so I have a second solution as well. We will call this the imperative solution.
+
+    
+    
+                const elementMine = document.querySelector(identification);
+    
+    
+                //store values in arr
+                let collectionOfTags = [];
+                let initialValue = elementMine.parentElement;
+            
+            
+            
+                //at this point we can get a collection of all the live elements within the dom as per the provided argument. Element.get.... is an html collection which means it is non-iterable so that is why we use Array.from
+                let iterableCollection = Array.from(initialValue.getElementsByTagName('*'));
+            
+            
+            
+                for(let i=0;i<iterableCollection.length;i++){
+                    collectionOfTags.push(iterableCollection[i].localName);
+                }
+                //this collection is an array of tags as strings
+                return collectionOfTags;
+
+                //I like this solution since it is readable, we're not changing something from the outside and we have no side effects(I think)
+            }
+
+            function findAllDomChildrenAlgo(identification){
+                //second attempt, diff strategy
+
+                //this is my attempt to implement a bfs algo. We will need a queue so I made an array and used standard array methods. I know it looks messy but this is my best attempt. Also, it is kind of unreadable(to me). I can imagine not understanding this in two months time. 
+                let nodeList = [];
+                const node = document.querySelector(identification);
+                if(!node){
+                    return;
+                }
+                let queue = [];
+                queue.push(node);
+                while(queue.length){
+                    let exitingNode = queue.shift();
+                    nodeList.push(exitingNode);
+                    for(let i = 0; i < exitingNode.children.length; i++){
+                        queue.push(exitingNode.children[i]);
+                    }
+                }
+                return nodeList;
+
+
+            }
+            
+        
+    
+
+    </script>
+    
+</head>
+<body>
+    <div>
+        <div id="start-point">
+            generic person
+            <div>
+                <ul>
+                    <ul>
+                        <li><a></a></li>
+                    </ul>
+                </ul>
+                <div>
+                    <ul></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="natural-class">
+            Other person
+            <ul>
+                <div>
+    
+                </div>
+            </ul>
+        </div>
+    </div>
+    <div>
+        Harry Potetr
+
+    </div>
+    <footer>
+        <ul id="my-ul">
+            <li><a>Home</a></li>
+            <li><a>Alone</a></li>
+        </ul>
+    </footer>
+    
+</body>
+</html>
